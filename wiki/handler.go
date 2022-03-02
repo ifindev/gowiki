@@ -16,11 +16,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		p = &Page{Title: title}
 	}
 
-	file, err := getHtmlFile("/view/view.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	file := "/view/view.html"
 	loadHtmlFile(file, w, p)
 }
 
@@ -31,29 +27,23 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
 		p = &Page{Title: title}
 	}
 
-	file, err := getHtmlFile("/view/edit.html")
+	file := "/view/edit.html"
+	loadHtmlFile(file, w, p)
+}
+
+func loadHtmlFile(relPath string, w http.ResponseWriter, p *Page) {
+
+	wd, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	loadHtmlFile(file, w, p)
-}
+	file := wd + relPath
 
-func getHtmlFile(relPath string) (string, error) {
-	var file string
-	wd, err := os.Getwd()
-	if err != nil {
-		return file, err
-	}
-
-	file = wd + relPath
-	return file, nil
-}
-
-func loadHtmlFile(file string, w http.ResponseWriter, p *Page) {
 	t, err := template.ParseFiles(file)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	t.Execute(w, p)
 }
