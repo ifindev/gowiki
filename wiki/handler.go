@@ -16,8 +16,7 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 		p = &Page{Title: title}
 	}
 
-	file := "/view/view.html"
-	loadHtmlFile(file, w, p)
+	loadHtmlFile("view.html", w, p)
 }
 
 func EditHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,18 +26,17 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
 		p = &Page{Title: title}
 	}
 
-	file := "/view/edit.html"
-	loadHtmlFile(file, w, p)
+	loadHtmlFile("edit.html", w, p)
 }
 
-func loadHtmlFile(relPath string, w http.ResponseWriter, p *Page) {
+func loadHtmlFile(html string, w http.ResponseWriter, p *Page) {
 
 	wd, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	file := wd + relPath
+	file := wd + "/view/" + html
 
 	t, err := template.ParseFiles(file)
 	if err != nil {
