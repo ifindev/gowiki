@@ -13,10 +13,10 @@ func ViewHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Path[len("/view/"):]
 	p, err := LoadPage(title)
 	if err != nil {
-		p = &Page{Title: title}
+		http.Redirect(w, r, "/edit/"+title, http.StatusFound)
 	}
 
-	loadHtmlFile("view.html", w, p)
+	renderHtmlFile("view.html", w, p)
 }
 
 func EditHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,10 +26,10 @@ func EditHandler(w http.ResponseWriter, r *http.Request) {
 		p = &Page{Title: title}
 	}
 
-	loadHtmlFile("edit.html", w, p)
+	renderHtmlFile("edit.html", w, p)
 }
 
-func loadHtmlFile(html string, w http.ResponseWriter, p *Page) {
+func renderHtmlFile(html string, w http.ResponseWriter, p *Page) {
 
 	wd, err := os.Getwd()
 	if err != nil {
